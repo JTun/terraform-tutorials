@@ -1,17 +1,17 @@
 provider "aws" {
-  region = "ca-central-1"
+  region = "us-east-2"
 
 }
 
 resource "aws_security_group" "wordpress_rule" {
   name        = "allow_all"
   description = "Allow all inbound traffic"
-  vpc_id      = "vpc-20940448"
+  vpc_id      = "vpc-26013c4e"
 
   ingress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -24,12 +24,12 @@ resource "aws_security_group" "wordpress_rule" {
   }
 }
 resource "aws_instance" "wordpress_terraform" {
-  ami           = "ami-011f5be9934c38463"
+  ami           = "ami-04f451f037c0fa344"
   instance_type = "t2.micro"
   vpc_security_group_ids = [
         "${aws_security_group.wordpress_rule.id}"
     ]
-  key_name = "ansible"
+  key_name = "ofullstack"
   tags {
     Name = "wordpress_terraform"
   }
@@ -40,7 +40,7 @@ resource "aws_instance" "wordpress_terraform" {
     connection {
     type     = "ssh"
     user     = "ubuntu"
-    private_key  = "${file("~/ansible.pem")}"
+    private_key  = "${file("~/ofullstack.pem")}"
   }
   }
   
